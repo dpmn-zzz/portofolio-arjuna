@@ -1,64 +1,59 @@
+'use client';
+
+import { useState, useRef } from 'react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Image from "next/image";
-
-// --- DATA DUMMY SERTIFIKAT ---
-const certificates = [
-  { 
-    id: 1, 
-    title: "Sertifikat Kompetensi IT (BNSP)", 
-    issuer: "Badan Nasional Sertifikasi Profesi", 
-    year: "2024", 
-    image: "/images/Profile-juna.jpg" 
-  },
-  { 
-    id: 2, 
-    title: "Belajar Dasar Pemrograman Web", 
-    issuer: "Dicoding Indonesia", 
-    year: "2023", 
-    image: "/images/Profile-juna.jpg" 
-  },
-  { 
-    id: 3, 
-    title: "Memulai Pemrograman dengan Python", 
-    issuer: "Dicoding Indonesia", 
-    year: "2023", 
-    image: "/images/Profile-juna.jpg" 
-  },
-  { 
-    id: 4, 
-    title: "IT Essentials & Networking Basics", 
-    issuer: "Cisco Networking Academy", 
-    year: "2022", 
-    image: "/images/Profile-juna.jpg" 
-  },
-];
+import CertificateCard, { CertificateProps } from "@/components/CertificateCard";
+import CertificateModal from "@/components/CertificateModal";
+import { certificates } from "../../data/certificates"; // Import data dari file eksternal
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 export default function CertificatesPage() {
+  // State untuk menyimpan sertifikat yang sedang diklik (untuk Modal)
+  const [selectedCert, setSelectedCert] = useState<CertificateProps | null>(null);
+  
+  // Ref untuk akses elemen slider
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  // Fungsi Scroll Slider (Kiri/Kanan)
+  const scroll = (direction: 'left' | 'right') => {
+    if (sliderRef.current) {
+        const { current } = sliderRef;
+        const scrollAmount = 400; // Jarak scroll pixel
+        
+        if (direction === 'left') {
+            current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        } else {
+            current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    }
+  };
+
   return (
     <main className="relative bg-gray-950 min-h-screen text-white selection:bg-blue-500 selection:text-white flex flex-col justify-between overflow-hidden">
       
-      {/* --- BACKGROUND DECORATION (Static) --- */}
+      {/* --- BACKGROUND DECORATION --- */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none"></div>
       
+      {/* Ambient Glow */}
       <div className="absolute top-0 right-0 w-125 h-125 bg-blue-600/10 rounded-full blur-[120px] -z-10 animate-pulse-slow"></div>
       <div className="absolute bottom-0 left-0 w-125 h-125 bg-purple-600/10 rounded-full blur-[120px] -z-10 animate-pulse-slow delay-700"></div>
       
-      {/* 1. NAVBAR (STATIS - Diam di tempat) */}
+      {/* 1. NAVBAR */}
       <div className="z-50 relative">
         <Navbar />
       </div>
 
-      {/* 2. WRAPPER KONTEN (ANIMASI - Bergerak masuk) */}
-      <div className="animate-fade-in-up grow z-10">
+      {/* 2. KONTEN UTAMA */}
+      <div className="grow pb-20 z-10 flex flex-col justify-center min-h-[80vh]">
         
-        {/* Spacer Block (Agar konten tidak tertutup Navbar fixed) */}
-        <div className="h-24 md:h-32 w-full bg-transparent" aria-hidden="true"></div>
+        {/* Spacer Block */}
+        <div className="h-20 w-full bg-transparent hidden md:block" aria-hidden="true"></div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-400 mx-auto px-4 sm:px-6 lg:px-8 w-full">
           
           {/* Header Section */}
-          <div className="text-center mb-16 relative">
+          <div className="text-center mb-12 relative animate-fade-in-up">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gradient inline-block">
               Sertifikasi & Penghargaan
             </h1>
@@ -68,49 +63,87 @@ export default function CertificatesPage() {
             </p>
           </div>
 
-          {/* Grid Certificates */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {certificates.map((cert) => (
-              <div 
-                key={cert.id} 
-                // Class animasi per-item dihapus agar menyatu dengan animasi page
-                className="group glass-card rounded-2xl overflow-hidden hover-card"
+          {/* --- SLIDER WRAPPER --- */}
+          <div className="relative group/slider animate-fade-in-up delay-200">
+            
+            {/* Tombol Navigasi KIRI (Hanya muncul jika ada data) */}
+            {certificates.length > 0 && (
+              <button 
+                  onClick={() => scroll('left')}
+                  className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-20 w-14 h-14 bg-gray-900/80 backdrop-blur-md border border-white/10 rounded-full items-center justify-center text-white opacity-0 group-hover/slider:opacity-100 hover:bg-blue-600 hover:scale-110 transition-all duration-300 shadow-xl cursor-pointer"
+                  aria-label="Scroll Left"
               >
-                {/* Bagian Gambar Sertifikat */}
-                <div className="relative aspect-4/3 overflow-hidden bg-gray-900 border-b border-white/5">
-                  <Image 
-                    src={cert.image} 
-                    alt={cert.title} 
-                    fill 
-                    className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100" 
-                  />
-                  {/* Efek Shine saat hover */}
-                  <div className="absolute inset-0 bg-linear-to-tr from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                </div>
+                  <FiChevronLeft size={28} />
+              </button>
+            )}
 
-                {/* Bagian Teks Keterangan */}
-                <div className="p-6">
-                  <h3 className="font-bold text-lg text-white mb-3 group-hover:text-blue-400 transition-colors duration-300 line-clamp-2">
-                    {cert.title}
-                  </h3>
-                  <div className="flex justify-between items-end text-sm">
-                    <div className="flex flex-col">
-                       <span className="text-gray-500 text-xs mb-1 uppercase tracking-wider">Penerbit</span>
-                       <span className="text-gray-300 font-medium group-hover:text-white transition-colors">{cert.issuer}</span>
-                    </div>
-                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/5 border border-white/10 text-gray-400 group-hover:bg-blue-500/10 group-hover:text-blue-300 group-hover:border-blue-500/30 transition-all duration-300">
-                      {cert.year}
-                    </span>
+            {/* Scrollable Area */}
+            <div 
+                ref={sliderRef}
+                className="flex overflow-x-auto gap-6 pb-12 pt-4 px-4 snap-x snap-mandatory min-h-75"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+                {/* CSS Hide Scrollbar */}
+                <style jsx>{`div::-webkit-scrollbar { display: none; }`}</style>
+
+                {/* LOGIKA RENDERING */}
+                {certificates.length > 0 ? (
+                  certificates.map((cert) => (
+                      <div 
+                          key={cert.id}
+                          // Responsive Width: Mobile full, Desktop fixed width
+                          className="snap-center shrink-0 w-[85vw] sm:w-100 md:w-95 h-120 transform transition-transform duration-300"
+                      >
+                          {/* Panggil Card & Pasang Trigger Modal */}
+                          <CertificateCard 
+                            certificate={cert} 
+                            onClick={() => setSelectedCert(cert)} 
+                          />
+                      </div>
+                  ))
+                ) : (
+                  // Placeholder jika data kosong
+                  <div className="w-full flex flex-col items-center justify-center text-gray-500 italic py-10 border border-white/5 rounded-2xl bg-white/5 backdrop-blur-sm">
+                    <p>Belum ada sertifikat yang ditampilkan.</p>
                   </div>
-                </div>
-              </div>
-            ))}
+                )}
+
+                {/* Spacer Kanan */}
+                <div className="w-4 shrink-0"></div>
+            </div>
+
+            {/* Tombol Navigasi KANAN (Hanya muncul jika ada data) */}
+            {certificates.length > 0 && (
+              <button 
+                  onClick={() => scroll('right')}
+                  className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-20 w-14 h-14 bg-gray-900/80 backdrop-blur-md border border-white/10 rounded-full items-center justify-center text-white opacity-0 group-hover/slider:opacity-100 hover:bg-blue-600 hover:scale-110 transition-all duration-300 shadow-xl cursor-pointer"
+                  aria-label="Scroll Right"
+              >
+                  <FiChevronRight size={28} />
+              </button>
+            )}
+
           </div>
+
+          {/* Swipe Hint (Mobile Only) */}
+          <div className="md:hidden text-center text-gray-500 text-sm -mt-5 animate-pulse">
+             &larr; Geser untuk melihat lainnya &rarr;
+          </div>
+
         </div>
       </div>
 
-      {/* 3. FOOTER (STATIS - Diam di tempat) */}
+      {/* 3. FOOTER */}
       <Footer />
+
+      {/* --- MODAL POPUP --- */}
+      {/* Dirender hanya jika user mengklik salah satu sertifikat */}
+      {selectedCert && (
+        <CertificateModal 
+            certificate={selectedCert} 
+            onClose={() => setSelectedCert(null)} 
+        />
+      )}
       
     </main>
   );
