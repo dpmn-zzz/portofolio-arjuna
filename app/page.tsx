@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Skills from "@/components/Skills";
 import Footer from "@/components/Footer";
-import Image from "next/image"; // Jangan lupa import Image
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -32,24 +32,22 @@ export default function Home() {
               {/* --- BAGIAN KIRI: FOTO DENGAN BORDER NGIKUTIN FOTO --- */}
               <div className="relative shrink-0 group">
                 
-                {/* 1. Efek Glow di belakang foto */}
-                <div className="absolute inset-0 bg-blue-600/20 blur-[40px] rounded-full group-hover:bg-blue-600/30 transition-all duration-500"></div>
+                {/* 1. Efek Glow di belakang foto (FIX: blur-[40px] -> blur-2xl) */}
+                <div className="absolute inset-0 bg-blue-600/20 blur-2xl rounded-full group-hover:bg-blue-600/30 transition-all duration-500"></div>
                 
                 {/* 2. Frame/Border Pembungkus */}
-                {/* Class 'w-fit' bikin div-nya ukurannya pas sama isinya (fotonya) */}
-                {/* Class 'p-2' ngasih jarak dikit antara foto sama border */}
                 <div className="relative w-fit h-fit p-2 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm rotate-3 group-hover:rotate-0 transition-transform duration-500 ease-out">
                     <div className="relative w-64 h-80 md:w-72 md:h-96 rounded-xl overflow-hidden shadow-2xl">
                         <Image 
                             src="/images/Profile-juna.jpg" // Pastikan nama file sesuai
                             alt="Arjuna Satria"
                             fill
-                            className="object-cover" // Foto akan mengisi area tanpa merusak rasio, tapi area-nya udah kita set di parent
+                            className="object-cover"
                         />
                     </div>
                 </div>
 
-                {/* Hiasan kotak kecil di pojok (Opsional, biar estetik) */}
+                {/* Hiasan kotak kecil di pojok */}
                 <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-gray-900 border border-white/10 rounded-xl flex items-center justify-center shadow-xl animate-bounce-slow z-20">
                      <span className="text-2xl">💻</span>
                 </div>
