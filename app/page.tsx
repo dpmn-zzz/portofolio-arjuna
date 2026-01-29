@@ -2,18 +2,18 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Skills from "@/components/Skills";
 import Footer from "@/components/Footer";
+import Image from "next/image"; // Jangan lupa import Image
 
 export default function Home() {
   return (
     <main className="bg-gray-950 min-h-screen text-white selection:bg-blue-500 selection:text-white overflow-x-hidden flex flex-col justify-between">
       
-      {/* 1. NAVBAR (STATIS - Diam di tempat) */}
+      {/* 1. NAVBAR */}
       <div className="z-50 relative">
         <Navbar />
       </div>
       
-      {/* 2. WRAPPER KONTEN (ANIMASI - Bergerak masuk) */}
-      {/* Semua konten halaman masuk di sini agar bergerak bersamaan */}
+      {/* 2. WRAPPER KONTEN */}
       <div className="animate-fade-in-up grow">
         
         {/* Hero Section */}
@@ -21,24 +21,49 @@ export default function Home() {
 
         {/* About Section */}
         <section className="py-20 bg-gray-950 relative">
-          {/* Dekorasi Garis Gradient Halus */}
+          {/* Dekorasi Garis */}
           <div className="absolute top-0 w-full h-px bg-linear-to-r from-transparent via-blue-900/50 to-transparent"></div>
           
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            {/* Container "Box" About - Updated to use glass-card & hover-card */}
-            <div className="relative glass-card rounded-3xl p-8 md:p-12 overflow-hidden hover-card">
+            {/* WRAPPER UTAMA: Flexbox untuk membagi Foto & Teks */}
+            <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16">
               
-              {/* Efek Glow di pojok dengan animasi pulse */}
-              <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] animate-pulse-slow"></div>
-              <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-600/10 rounded-full blur-[80px] animate-pulse-slow delay-500"></div>
+              {/* --- BAGIAN KIRI: FOTO DENGAN BORDER NGIKUTIN FOTO --- */}
+              <div className="relative shrink-0 group">
+                
+                {/* 1. Efek Glow di belakang foto */}
+                <div className="absolute inset-0 bg-blue-600/20 blur-[40px] rounded-full group-hover:bg-blue-600/30 transition-all duration-500"></div>
+                
+                {/* 2. Frame/Border Pembungkus */}
+                {/* Class 'w-fit' bikin div-nya ukurannya pas sama isinya (fotonya) */}
+                {/* Class 'p-2' ngasih jarak dikit antara foto sama border */}
+                <div className="relative w-fit h-fit p-2 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm rotate-3 group-hover:rotate-0 transition-transform duration-500 ease-out">
+                    <div className="relative w-64 h-80 md:w-72 md:h-96 rounded-xl overflow-hidden shadow-2xl">
+                        <Image 
+                            src="/images/Profile-juna.jpg" // Pastikan nama file sesuai
+                            alt="Arjuna Satria"
+                            fill
+                            className="object-cover" // Foto akan mengisi area tanpa merusak rasio, tapi area-nya udah kita set di parent
+                        />
+                    </div>
+                </div>
 
-              <div className="relative text-center max-w-4xl mx-auto">
-                <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white">
+                {/* Hiasan kotak kecil di pojok (Opsional, biar estetik) */}
+                <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-gray-900 border border-white/10 rounded-xl flex items-center justify-center shadow-xl animate-bounce-slow z-20">
+                     <span className="text-2xl">💻</span>
+                </div>
+
+              </div>
+
+              {/* --- BAGIAN KANAN: TEKS --- */}
+              <div className="relative text-center md:text-left max-w-2xl">
+                
+                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
                   Tentang <span className="text-gradient">Saya</span>
                 </h2>
                 
-                <div className="space-y-6 text-gray-300 text-lg leading-relaxed text-justify md:text-center">
+                <div className="space-y-6 text-gray-300 text-lg leading-relaxed">
                   <p>
                     Hai! Saya <strong className="text-white">Arjuna Satria</strong>. Perjalanan saya di dunia teknologi dimulai dari peran <strong className="text-blue-400">IT Support</strong>, di mana saya belajar bahwa teknologi bukan hanya soal kode, tapi soal <em className="text-gray-400">solusi yang bisa diandalkan</em>.
                   </p>
@@ -51,14 +76,14 @@ export default function Home() {
                 </div>
 
                 {/* Hiasan Garis Bawah */}
-                <div className="mt-10 flex justify-center gap-2">
-                   <span className="w-16 h-1 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></span>
-                   <span className="w-4 h-1 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.5)]"></span>
-                   <span className="w-2 h-1 bg-gray-600 rounded-full"></span>
+                <div className="mt-8 flex justify-center md:justify-start gap-2">
+                    <span className="w-16 h-1 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></span>
+                    <span className="w-4 h-1 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.5)]"></span>
                 </div>
-              </div>
-            </div>
 
+              </div>
+
+            </div>
           </div>
         </section>
 
@@ -66,7 +91,7 @@ export default function Home() {
         <Skills />
       </div>
 
-      {/* 3. FOOTER (STATIS - Diam di tempat) */}
+      {/* 3. FOOTER */}
       <Footer />
       
     </main>
