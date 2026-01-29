@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProjectCard, { ProjectProps } from "@/components/ProjectCard";
 import ProjectModal from "@/components/ProjectModal";
-import { projects } from "../../data/projects"; // Pastikan path ini benar sesuai struktur folder kamu
+import { projects } from "../../data/projects"; // Path data relative
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 export default function ProjectsPage() {
@@ -26,7 +26,8 @@ export default function ProjectsPage() {
   };
 
   return (
-    <main className="relative bg-gray-950 min-h-screen text-white selection:bg-blue-500 selection:text-white flex flex-col justify-between overflow-hidden">
+    // FIX: Ditambahkan 'pt-24' agar konten turun ke bawah dan tidak tertutup Navbar Fixed
+    <main className="relative bg-gray-950 min-h-screen text-white selection:bg-blue-500 selection:text-white flex flex-col justify-between overflow-hidden pt-24">
       
       {/* --- BACKGROUND DECORATION --- */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none"></div>
@@ -34,13 +35,13 @@ export default function ProjectsPage() {
       <div className="absolute top-0 right-0 w-125 h-125 bg-blue-600/10 rounded-full blur-[120px] -z-10 animate-pulse-slow"></div>
       <div className="absolute bottom-0 left-0 w-125 h-125 bg-purple-600/10 rounded-full blur-[120px] -z-10 animate-pulse-slow delay-700"></div>
       
-      <div className="z-50 relative">
-        <Navbar />
-      </div>
+      {/* 1. NAVBAR */}
+      <Navbar />
 
-      <div className="grow pb-20 z-10 flex flex-col justify-center min-h-[80vh]">
+      {/* 2. KONTEN UTAMA */}
+      <div className="grow pb-20 z-10 flex flex-col justify-center min-h-[60vh]">
         
-        <div className="h-20 w-full bg-transparent hidden md:block" aria-hidden="true"></div>
+        {/* Spacer manual <div> SUDAH DIHAPUS karena sudah pakai pt-24 */}
         
         <div className="max-w-400 mx-auto px-4 sm:px-6 lg:px-8 w-full">
           
@@ -59,7 +60,7 @@ export default function ProjectsPage() {
           {/* --- SLIDER WRAPPER --- */}
           <div className="relative group/slider animate-fade-in-up delay-200">
             
-            {/* Tombol KIRI (Hanya muncul jika ada data) */}
+            {/* Tombol Kiri */}
             {projects.length > 0 && (
               <button 
                   onClick={() => scroll('left')}
@@ -70,7 +71,7 @@ export default function ProjectsPage() {
               </button>
             )}
 
-            {/* Scrollable Area */}
+            {/* Scroll Area */}
             <div 
                 ref={sliderRef}
                 className="flex overflow-x-auto gap-6 pb-12 pt-4 px-4 snap-x snap-mandatory min-h-75"
@@ -78,9 +79,7 @@ export default function ProjectsPage() {
             >
                 <style jsx>{`div::-webkit-scrollbar { display: none; }`}</style>
 
-                {/* LOGIKA RENDERING */}
                 {projects.length > 0 ? (
-                  // JIKA ADA DATA: Render Kartu
                   projects.map((project) => (
                       <div 
                           key={project.id}
@@ -93,7 +92,6 @@ export default function ProjectsPage() {
                       </div>
                   ))
                 ) : (
-                  // JIKA KOSONG: Render Placeholder Rapi
                   <div className="w-full flex flex-col items-center justify-center text-gray-500 italic py-10 border border-white/5 rounded-2xl bg-white/5 backdrop-blur-sm">
                     <p>Belum ada project yang ditampilkan.</p>
                   </div>
@@ -102,7 +100,7 @@ export default function ProjectsPage() {
                 <div className="w-4 shrink-0"></div>
             </div>
 
-            {/* Tombol KANAN (Hanya muncul jika ada data) */}
+            {/* Tombol Kanan */}
             {projects.length > 0 && (
               <button 
                   onClick={() => scroll('right')}
@@ -112,10 +110,9 @@ export default function ProjectsPage() {
                   <FiChevronRight size={28} />
               </button>
             )}
-
           </div>
 
-          {/* Swipe Hint (Hanya muncul jika ada data & di Mobile) */}
+          {/* Swipe Hint Mobile */}
           {projects.length > 0 && (
              <div className="md:hidden text-center text-gray-500 text-sm -mt-5 animate-pulse">
                 &larr; Geser untuk melihat lainnya &rarr;
@@ -127,7 +124,7 @@ export default function ProjectsPage() {
 
       <Footer />
 
-      {/* MODAL (Hanya muncul jika ada selectedProject) */}
+      {/* MODAL */}
       {selectedProject && (
         <ProjectModal 
             project={selectedProject} 

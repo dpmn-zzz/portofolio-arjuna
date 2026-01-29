@@ -5,21 +5,17 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CertificateCard, { CertificateProps } from "@/components/CertificateCard";
 import CertificateModal from "@/components/CertificateModal";
-import { certificates } from "../../data/certificates"; // Import data dari file eksternal
+import { certificates } from "../../data/certificates"; // Import data
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 export default function CertificatesPage() {
-  // State untuk menyimpan sertifikat yang sedang diklik (untuk Modal)
   const [selectedCert, setSelectedCert] = useState<CertificateProps | null>(null);
-  
-  // Ref untuk akses elemen slider
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  // Fungsi Scroll Slider (Kiri/Kanan)
   const scroll = (direction: 'left' | 'right') => {
     if (sliderRef.current) {
         const { current } = sliderRef;
-        const scrollAmount = 400; // Jarak scroll pixel
+        const scrollAmount = 400;
         
         if (direction === 'left') {
             current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -30,25 +26,22 @@ export default function CertificatesPage() {
   };
 
   return (
-    <main className="relative bg-gray-950 min-h-screen text-white selection:bg-blue-500 selection:text-white flex flex-col justify-between overflow-hidden">
+    // FIX: Ditambahkan 'pt-24' agar konten tidak tertutup Navbar Fixed
+    <main className="relative bg-gray-950 min-h-screen text-white selection:bg-blue-500 selection:text-white flex flex-col justify-between overflow-hidden pt-24">
       
       {/* --- BACKGROUND DECORATION --- */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none"></div>
       
-      {/* Ambient Glow */}
       <div className="absolute top-0 right-0 w-125 h-125 bg-blue-600/10 rounded-full blur-[120px] -z-10 animate-pulse-slow"></div>
       <div className="absolute bottom-0 left-0 w-125 h-125 bg-purple-600/10 rounded-full blur-[120px] -z-10 animate-pulse-slow delay-700"></div>
       
       {/* 1. NAVBAR */}
-      <div className="z-50 relative">
-        <Navbar />
-      </div>
+      <Navbar />
 
       {/* 2. KONTEN UTAMA */}
-      <div className="grow pb-20 z-10 flex flex-col justify-center min-h-[80vh]">
+      <div className="grow pb-20 z-10 flex flex-col justify-center min-h-[60vh]">
         
-        {/* Spacer Block */}
-        <div className="h-20 w-full bg-transparent hidden md:block" aria-hidden="true"></div>
+        {/* Spacer manual <div> sudah DIHAPUS karena sudah pakai pt-24 di main */}
         
         <div className="max-w-400 mx-auto px-4 sm:px-6 lg:px-8 w-full">
           
@@ -66,35 +59,30 @@ export default function CertificatesPage() {
           {/* --- SLIDER WRAPPER --- */}
           <div className="relative group/slider animate-fade-in-up delay-200">
             
-            {/* Tombol Navigasi KIRI (Hanya muncul jika ada data) */}
+            {/* Tombol Kiri */}
             {certificates.length > 0 && (
               <button 
                   onClick={() => scroll('left')}
                   className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-20 w-14 h-14 bg-gray-900/80 backdrop-blur-md border border-white/10 rounded-full items-center justify-center text-white opacity-0 group-hover/slider:opacity-100 hover:bg-blue-600 hover:scale-110 transition-all duration-300 shadow-xl cursor-pointer"
-                  aria-label="Scroll Left"
               >
                   <FiChevronLeft size={28} />
               </button>
             )}
 
-            {/* Scrollable Area */}
+            {/* Scroll Area */}
             <div 
                 ref={sliderRef}
                 className="flex overflow-x-auto gap-6 pb-12 pt-4 px-4 snap-x snap-mandatory min-h-75"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-                {/* CSS Hide Scrollbar */}
                 <style jsx>{`div::-webkit-scrollbar { display: none; }`}</style>
 
-                {/* LOGIKA RENDERING */}
                 {certificates.length > 0 ? (
                   certificates.map((cert) => (
                       <div 
                           key={cert.id}
-                          // Responsive Width: Mobile full, Desktop fixed width
                           className="snap-center shrink-0 w-[85vw] sm:w-100 md:w-95 h-120 transform transition-transform duration-300"
                       >
-                          {/* Panggil Card & Pasang Trigger Modal */}
                           <CertificateCard 
                             certificate={cert} 
                             onClick={() => setSelectedCert(cert)} 
@@ -102,42 +90,37 @@ export default function CertificatesPage() {
                       </div>
                   ))
                 ) : (
-                  // Placeholder jika data kosong
                   <div className="w-full flex flex-col items-center justify-center text-gray-500 italic py-10 border border-white/5 rounded-2xl bg-white/5 backdrop-blur-sm">
                     <p>Belum ada sertifikat yang ditampilkan.</p>
                   </div>
                 )}
-
-                {/* Spacer Kanan */}
                 <div className="w-4 shrink-0"></div>
             </div>
 
-            {/* Tombol Navigasi KANAN (Hanya muncul jika ada data) */}
+            {/* Tombol Kanan */}
             {certificates.length > 0 && (
               <button 
                   onClick={() => scroll('right')}
                   className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-20 w-14 h-14 bg-gray-900/80 backdrop-blur-md border border-white/10 rounded-full items-center justify-center text-white opacity-0 group-hover/slider:opacity-100 hover:bg-blue-600 hover:scale-110 transition-all duration-300 shadow-xl cursor-pointer"
-                  aria-label="Scroll Right"
               >
                   <FiChevronRight size={28} />
               </button>
             )}
-
           </div>
 
-          {/* Swipe Hint (Mobile Only) */}
-          <div className="md:hidden text-center text-gray-500 text-sm -mt-5 animate-pulse">
-             &larr; Geser untuk melihat lainnya &rarr;
-          </div>
+          {/* Mobile Hint */}
+          {certificates.length > 0 && (
+            <div className="md:hidden text-center text-gray-500 text-sm -mt-5 animate-pulse">
+               &larr; Geser untuk melihat lainnya &rarr;
+            </div>
+          )}
 
         </div>
       </div>
 
-      {/* 3. FOOTER */}
       <Footer />
 
-      {/* --- MODAL POPUP --- */}
-      {/* Dirender hanya jika user mengklik salah satu sertifikat */}
+      {/* MODAL */}
       {selectedCert && (
         <CertificateModal 
             certificate={selectedCert} 
