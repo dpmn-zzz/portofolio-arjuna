@@ -83,14 +83,14 @@ export default function Footer() {
                 <FiGithub size={20} />
               </a>
               <a 
-                href="#" 
+                href="https://www.linkedin.com/in/arjuna-satria-b61936390?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" 
                 className="w-10 h-10 rounded-full bg-gray-900 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-[#0077b5] hover:text-white hover:scale-110 transition-all duration-300 shadow-lg"
                 aria-label="LinkedIn"
               >
                 <FiLinkedin size={20} />
               </a>
               <a 
-                href="#" 
+                href="https://www.instagram.com/cngkt.men?igsh=MW94ZG5pZHNvb2dkeA==" 
                 className="w-10 h-10 rounded-full bg-gray-900 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-[#E1306C] hover:text-white hover:scale-110 transition-all duration-300 shadow-lg"
                 aria-label="Instagram"
               >
