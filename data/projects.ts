@@ -30,5 +30,14 @@ export const projects: Project[] = [
     image: "/images/cafe-order.png", // Pastikan lu punya screenshot project ini di folder public/images
     github: "https://github.com/ArjunaSatria/cafe-pos-system", // Sesuaikan dengan link repo lu tadi
     demo: "#",
-  }
+  },
+  {
+  id: 3,
+  title: "Dwi Medika - Clinic Management System",
+  description: "Sistem informasi manajemen klinik terintegrasi dengan 3 hak akses (Admin, Dokter, Pasien). Memiliki fitur antrean medis real-time, notifikasi WhatsApp otomatis via Fonnte API, dan sistem pembayaran terintegrasi Midtrans.",
+  techStack: ["Native PHP", "MySQL", "Tailwind CSS", "Fonnte WA API", "Midtrans API", "Chart.js"],
+  image: "/images/klinik-dwi-medika.png", // Jangan lupa naruh screenshot dashboard cakep tadi di sini
+  github: "https://github.com/dpmn-zzz/klinik_pmk",
+  demo: "#",
+}
 ];
